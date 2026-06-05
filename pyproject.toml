@@ -1,0 +1,32 @@
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[project]
+name = "ExplainLLM"
+dynamic = ["version"]
+description = "LLM Token Relevance Calculator using DL-Backtrace patterns"
+readme = "README.md"
+license = "MIT"
+requires-python = ">=3.10"
+dependencies = [
+    "torch>=2.0",
+    "transformers>=4.35",
+    "numpy",
+]
+
+[project.optional-dependencies]
+viz = ["matplotlib", "seaborn", "networkx"]
+app = ["streamlit>=1.30"]
+api = ["fastapi>=0.110", "uvicorn>=0.29"]
+dev = ["pytest", "pytest-cov"]
+all = ["ExplainLLM[viz,app,api,dev]"]
+
+[project.scripts]
+explainllm = "explainllm.cli:main"
+
+[tool.hatch.version]
+path = "src/explainllm/_version.py"
+
+[tool.hatch.build.targets.wheel]
+packages = ["src/explainllm"]
