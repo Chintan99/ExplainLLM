@@ -1,0 +1,56 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 840 580" role="img">
+  <title>ExplainLLM Streamlit UI illustration</title>
+  <rect width="840" height="580" fill="#f6f7f3"/>
+  <rect width="228" height="580" fill="#eff1ec"/>
+  <path d="M228 0v580" stroke="#dce0d8"/>
+  <g font-family="ui-sans-serif,sans-serif">
+    <text x="25" y="38" font-size="15" font-weight="700" fill="#1a1e1b">ExplainLLM</text>
+    <text x="25" y="66" font-size="8" font-weight="700" letter-spacing="1.2" fill="#277456">INSPECTOR</text>
+    <rect x="20" y="84" width="188" height="55" rx="9" fill="#fff" stroke="#d8ddd5"/>
+    <text x="33" y="105" font-size="8" fill="#7c847d">SELECTED PROMPT</text><text x="33" y="124" font-size="10" font-weight="600" fill="#303630">The color of grass is…</text>
+    <text x="25" y="169" font-size="9" font-weight="600" fill="#3a423b">Inspect step</text>
+    <rect x="25" y="181" width="170" height="4" rx="2" fill="#d5dad3"/><rect x="25" y="181" width="74" height="4" rx="2" fill="#277456"/><circle cx="99" cy="183" r="7" fill="#fff" stroke="#277456" stroke-width="2"/>
+    <g transform="translate(20 213)">
+      <rect width="188" height="235" rx="11" fill="#fff" stroke="#d8ddd5"/>
+      <text x="13" y="24" font-size="9" font-weight="700" fill="#2e352f">Token relevance</text>
+      <g transform="translate(16 49)">
+        <rect width="24" height="24" rx="4" fill="#dceadd"/><rect x="26" width="24" height="24" rx="4" fill="#acd3b8"/><rect x="52" width="24" height="24" rx="4" fill="#e5eee6"/><rect x="78" width="24" height="24" rx="4" fill="#e47847"/><rect x="104" width="24" height="24" rx="4" fill="#c2dec9"/><rect x="130" width="24" height="24" rx="4" fill="#edf0eb"/>
+        <rect y="26" width="24" height="24" rx="4" fill="#e6eee7"/><rect x="26" y="26" width="24" height="24" rx="4" fill="#d2e5d6"/><rect x="52" y="26" width="24" height="24" rx="4" fill="#e6eee7"/><rect x="78" y="26" width="24" height="24" rx="4" fill="#bedcc6"/><rect x="104" y="26" width="24" height="24" rx="4" fill="#d7e8dc"/><rect x="130" y="26" width="24" height="24" rx="4" fill="#eb9b71"/>
+        <rect y="52" width="24" height="24" rx="4" fill="#e7efe8"/><rect x="26" y="52" width="24" height="24" rx="4" fill="#d6e8da"/><rect x="52" y="52" width="24" height="24" rx="4" fill="#e7efe8"/><rect x="78" y="52" width="24" height="24" rx="4" fill="#c9e1cf"/><rect x="104" y="52" width="24" height="24" rx="4" fill="#d6e8da"/><rect x="130" y="52" width="24" height="24" rx="4" fill="#e89065"/>
+      </g>
+      <text x="16" y="153" font-size="8" fill="#727b73">Top contributors</text>
+      <text x="16" y="177" font-size="9" fill="#333a34">grass</text><rect x="64" y="169" width="92" height="7" rx="3.5" fill="#ecedea"/><rect x="64" y="169" width="69" height="7" rx="3.5" fill="#e47847"/><text x="169" y="176" text-anchor="end" font-size="8" fill="#525b53">.48</text>
+      <text x="16" y="201" font-size="9" fill="#333a34">is</text><rect x="64" y="193" width="92" height="7" rx="3.5" fill="#ecedea"/><rect x="64" y="193" width="32" height="7" rx="3.5" fill="#79ad91"/><text x="169" y="200" text-anchor="end" font-size="8" fill="#525b53">.22</text>
+      <text x="16" y="225" font-size="9" fill="#333a34">color</text><rect x="64" y="217" width="92" height="7" rx="3.5" fill="#ecedea"/><rect x="64" y="217" width="27" height="7" rx="3.5" fill="#79ad91"/><text x="169" y="224" text-anchor="end" font-size="8" fill="#525b53">.19</text>
+    </g>
+    <rect x="20" y="466" width="188" height="35" rx="8" fill="#183e2e"/><text x="114" y="488" text-anchor="middle" font-size="10" font-weight="600" fill="#fff">Download JSON</text>
+
+    <text x="270" y="49" font-size="19" font-weight="700" fill="#1d211e">ExplainLLM Chat</text>
+    <text x="270" y="70" font-size="9" fill="#7b837c">Send a prompt and inspect each generation step.</text>
+    <g transform="translate(270 110)">
+      <circle cx="17" cy="17" r="17" fill="#e3e7e0"/><path d="M10 17h14M17 10v14" stroke="#6f7870"/>
+      <rect x="48" y="0" width="475" height="67" rx="12" fill="#fff" stroke="#dce0d8"/>
+      <text x="66" y="28" font-size="8" font-weight="700" fill="#7b837c">YOU</text><text x="66" y="48" font-size="12" fill="#293029">The color of grass is</text>
+    </g>
+    <g transform="translate(270 209)">
+      <circle cx="17" cy="17" r="17" fill="#183e2e"/><circle cx="12" cy="17" r="3" fill="#a9efc7"/><circle cx="22" cy="12" r="3" fill="#a9efc7"/><circle cx="22" cy="22" r="3" fill="#a9efc7"/>
+      <path d="M14.5 15.5 19 13M14.5 18.5 19 21" stroke="#a9efc7"/>
+      <rect x="48" y="0" width="475" height="118" rx="12" fill="#fff" stroke="#dce0d8"/>
+      <text x="66" y="28" font-size="8" font-weight="700" fill="#277456">MODEL</text>
+      <text x="66" y="53" font-size="13" fill="#293029">Green, because chlorophyll reflects green light.</text>
+      <path d="M66 70h430" stroke="#edf0eb"/>
+      <rect x="66" y="84" width="155" height="20" rx="5" fill="#edf5ef"/><text x="77" y="98" font-size="8" fill="#41634d">combined · 12 tokens · cpu</text>
+      <rect x="397" y="82" width="99" height="24" rx="6" fill="#f3f5f1" stroke="#dce0d8"/><text x="446.5" y="98" text-anchor="middle" font-size="8" font-weight="600" fill="#475048">Inspect relevance</text>
+    </g>
+    <g transform="translate(270 385)">
+      <rect width="523" height="59" rx="12" fill="#fff" stroke="#dce0d8"/>
+      <text x="20" y="35" font-size="10" fill="#9ba29c">Ask the model…</text>
+      <circle cx="491" cy="29.5" r="18" fill="#183e2e"/><path d="m484 30 6 6 9-13" fill="none" stroke="#a9efc7" stroke-width="2"/>
+    </g>
+    <g transform="translate(270 479)">
+      <rect width="155" height="55" rx="9" fill="#eff3ed"/><text x="13" y="21" font-size="7" fill="#788179">MODEL</text><text x="13" y="40" font-size="9" font-weight="600" fill="#39413a">tiny-gpt2</text>
+      <rect x="168" width="155" height="55" rx="9" fill="#eff3ed"/><text x="181" y="21" font-size="7" fill="#788179">METHOD</text><text x="181" y="40" font-size="9" font-weight="600" fill="#39413a">combined</text>
+      <rect x="336" width="155" height="55" rx="9" fill="#eff3ed"/><text x="349" y="21" font-size="7" fill="#788179">ALPHA</text><text x="349" y="40" font-size="9" font-weight="600" fill="#39413a">0.50</text>
+    </g>
+  </g>
+</svg>

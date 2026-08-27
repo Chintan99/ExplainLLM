@@ -1,0 +1,62 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 760 590" role="img">
+  <title>Illustrative token relevance heatmap</title>
+  <style>
+    #scan-row { transform-box: fill-box; transform-origin: center; animation: scan-rows 8s ease-in-out infinite; }
+    #scan-label { animation: scan-label 8s ease-in-out infinite; }
+    #context-divider { animation: divider-pulse 2s ease-in-out infinite; }
+    @keyframes scan-rows {
+      0%, 18% { transform: translateY(0); }
+      25%, 43% { transform: translateY(64px); }
+      50%, 68% { transform: translateY(128px); }
+      75%, 93% { transform: translateY(192px); }
+      100% { transform: translateY(0); }
+    }
+    @keyframes scan-label { 0%, 100% { opacity: .55; } 10%, 90% { opacity: 1; } }
+    @keyframes divider-pulse { 0%, 100% { opacity: .35; } 50% { opacity: 1; } }
+    @media (prefers-reduced-motion: reduce) {
+      #scan-row, #scan-label, #context-divider { animation: none; }
+    }
+  </style>
+  <rect width="760" height="590" rx="18" fill="#fbfcf9"/>
+  <g font-family="ui-sans-serif,sans-serif">
+    <text x="45" y="57" font-size="12" font-weight="700" letter-spacing="1.5" fill="#277456">FULL CONTEXT RELEVANCE</text>
+    <text x="45" y="88" font-size="23" font-weight="650" fill="#1a1e1b">Which tokens shaped each output?</text>
+    <text x="45" y="112" font-size="11" fill="#7b837c">Rows are generated tokens · columns are the context available at that step</text>
+  </g>
+  <g transform="translate(182 165)" font-family="ui-monospace,monospace" font-size="10" fill="#6a746c" text-anchor="middle">
+    <text x="0" y="0" transform="rotate(-38 0 0)">The</text><text x="64" y="0" transform="rotate(-38 64 0)">color</text><text x="128" y="0" transform="rotate(-38 128 0)">of</text><text x="192" y="0" transform="rotate(-38 192 0)" fill="#aa4d31" font-weight="700">grass</text><text x="256" y="0" transform="rotate(-38 256 0)">is</text><text x="320" y="0" transform="rotate(-38 320 0)">green</text><text x="384" y="0" transform="rotate(-38 384 0)">because</text><text x="448" y="0" transform="rotate(-38 448 0)">it</text>
+  </g>
+  <g font-family="ui-sans-serif,sans-serif" font-size="11" fill="#3e4640" text-anchor="end">
+    <text x="156" y="222">→ green</text><text x="156" y="286">→ because</text><text x="156" y="350">→ it</text><text x="156" y="414">→ reflects</text>
+  </g>
+  <g transform="translate(170 184)" stroke="#fff" stroke-width="3">
+    <!-- row 1 -->
+    <rect x="0" y="0" width="64" height="64" rx="7" fill="#e6f1e8"/><rect x="64" y="0" width="64" height="64" rx="7" fill="#9cccad"/><rect x="128" y="0" width="64" height="64" rx="7" fill="#d6e9db"/><rect x="192" y="0" width="64" height="64" rx="7" fill="#e47847"/><rect x="256" y="0" width="64" height="64" rx="7" fill="#a8d1b5"/><rect x="320" y="0" width="64" height="64" rx="7" fill="#ecefeb"/><rect x="384" y="0" width="64" height="64" rx="7" fill="#ecefeb"/><rect x="448" y="0" width="64" height="64" rx="7" fill="#ecefeb"/>
+    <!-- row 2 -->
+    <rect x="0" y="64" width="64" height="64" rx="7" fill="#e3eee5"/><rect x="64" y="64" width="64" height="64" rx="7" fill="#d4e7d9"/><rect x="128" y="64" width="64" height="64" rx="7" fill="#e3eee5"/><rect x="192" y="64" width="64" height="64" rx="7" fill="#b7d9c1"/><rect x="256" y="64" width="64" height="64" rx="7" fill="#c7e0cd"/><rect x="320" y="64" width="64" height="64" rx="7" fill="#eaa078"/><rect x="384" y="64" width="64" height="64" rx="7" fill="#ecefeb"/><rect x="448" y="64" width="64" height="64" rx="7" fill="#ecefeb"/>
+    <!-- row 3 -->
+    <rect x="0" y="128" width="64" height="64" rx="7" fill="#e9f0e9"/><rect x="64" y="128" width="64" height="64" rx="7" fill="#dceadd"/><rect x="128" y="128" width="64" height="64" rx="7" fill="#e7efe8"/><rect x="192" y="128" width="64" height="64" rx="7" fill="#c9e1cf"/><rect x="256" y="128" width="64" height="64" rx="7" fill="#d5e8da"/><rect x="320" y="128" width="64" height="64" rx="7" fill="#e68b5e"/><rect x="384" y="128" width="64" height="64" rx="7" fill="#c3dec9"/><rect x="448" y="128" width="64" height="64" rx="7" fill="#ecefeb"/>
+    <!-- row 4 -->
+    <rect x="0" y="192" width="64" height="64" rx="7" fill="#e8f0e9"/><rect x="64" y="192" width="64" height="64" rx="7" fill="#bddbc4"/><rect x="128" y="192" width="64" height="64" rx="7" fill="#e5eee6"/><rect x="192" y="192" width="64" height="64" rx="7" fill="#add3b8"/><rect x="256" y="192" width="64" height="64" rx="7" fill="#d9e8dc"/><rect x="320" y="192" width="64" height="64" rx="7" fill="#efa77f"/><rect x="384" y="192" width="64" height="64" rx="7" fill="#d6e8da"/><rect x="448" y="192" width="64" height="64" rx="7" fill="#c2ddc9"/>
+  </g>
+  <g transform="translate(170 184)" font-family="ui-monospace,monospace" font-size="10" text-anchor="middle" fill="#46604f">
+    <text x="32" y="37">.04</text><text x="96" y="37">.19</text><text x="160" y="37">.07</text><text x="224" y="37" fill="#fff" font-weight="700">.48</text><text x="288" y="37">.22</text>
+    <text x="32" y="101">.05</text><text x="96" y="101">.08</text><text x="160" y="101">.04</text><text x="224" y="101">.13</text><text x="288" y="101">.11</text><text x="352" y="101" fill="#fff" font-weight="700">.59</text>
+    <text x="32" y="165">.03</text><text x="96" y="165">.06</text><text x="160" y="165">.03</text><text x="224" y="165">.12</text><text x="288" y="165">.07</text><text x="352" y="165" fill="#fff" font-weight="700">.51</text><text x="416" y="165">.18</text>
+    <text x="32" y="229">.03</text><text x="96" y="229">.15</text><text x="160" y="229">.04</text><text x="224" y="229">.19</text><text x="288" y="229">.06</text><text x="352" y="229" fill="#fff" font-weight="700">.31</text><text x="416" y="229">.07</text><text x="480" y="229">.15</text>
+  </g>
+  <rect id="scan-row" x="168" y="182" width="516" height="68" rx="9" fill="none" stroke="#277456" stroke-width="2.5"/>
+  <g id="scan-label" font-family="ui-sans-serif,sans-serif">
+    <rect x="563" y="138" width="121" height="23" rx="11.5" fill="#183e2e"/>
+    <circle cx="578" cy="149.5" r="3" fill="#a9efc7"/>
+    <text x="588" y="153" font-size="8" font-weight="700" letter-spacing=".8" fill="#fff">EXPLAINING STEP</text>
+  </g>
+  <path id="context-divider" d="M490 169v281" stroke="#277456" stroke-width="1.5" stroke-dasharray="5 5"/>
+  <g font-family="ui-sans-serif,sans-serif" font-size="10">
+    <rect x="170" y="476" width="12" height="12" rx="3" fill="#e47847"/><text x="190" y="486" fill="#5c655e">higher relevance</text>
+    <rect x="305" y="476" width="12" height="12" rx="3" fill="#dceadd"/><text x="325" y="486" fill="#5c655e">lower relevance</text>
+    <rect x="446" y="476" width="12" height="12" rx="3" fill="#ecefeb"/><text x="466" y="486" fill="#5c655e">not in context yet</text>
+  </g>
+  <rect x="45" y="530" width="670" height="1" fill="#e1e5df"/>
+  <text x="45" y="559" font-family="ui-sans-serif,sans-serif" font-size="10" fill="#879088">Illustrative values · each visible row sums to approximately 1.0</text>
+</svg>

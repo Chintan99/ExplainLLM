@@ -1,0 +1,493 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta
+      name="description"
+      content="ExplainLLM documentation: trace how prompt and generated tokens contribute to each next-token decision."
+    />
+    <meta name="theme-color" content="#f7f8f4" />
+    <title>ExplainLLM — token relevance, made visible</title>
+    <link rel="icon" href="assets/favicon.svg" type="image/svg+xml" />
+    <link rel="stylesheet" href="styles.css" />
+    <script src="script.js" defer></script>
+  </head>
+  <body>
+    <a class="skip-link" href="#content">Skip to content</a>
+
+    <header class="site-header" data-header>
+      <div class="shell header-inner">
+        <a class="brand" href="#top" aria-label="ExplainLLM home">
+          <svg viewBox="0 0 32 32" aria-hidden="true">
+            <rect width="32" height="32" rx="9" fill="currentColor" />
+            <circle cx="10" cy="16" r="3" />
+            <circle cx="22" cy="9" r="3" />
+            <circle cx="22" cy="23" r="3" />
+            <path d="M12.5 14.6 19.3 10.5M12.5 17.4l6.8 4.1" />
+          </svg>
+          <span>ExplainLLM</span>
+        </a>
+
+        <button class="nav-toggle" type="button" aria-expanded="false" aria-controls="site-nav">
+          <span></span><span></span><span></span>
+          <span class="sr-only">Toggle navigation</span>
+        </button>
+
+        <nav class="site-nav" id="site-nav" aria-label="Primary navigation">
+          <a href="#quickstart">Quickstart</a>
+          <a href="#how-it-works">How it works</a>
+          <a href="#methods">Methods</a>
+          <a href="#tradeoffs">Tradeoffs</a>
+          <a href="#reference">Reference</a>
+          <a class="github-link" href="https://github.com/Chintan99/ExplainLLM">GitHub <span aria-hidden="true">↗</span></a>
+        </nav>
+      </div>
+    </header>
+
+    <main id="content">
+      <section class="hero" id="top">
+        <div class="shell hero-grid">
+          <div class="hero-copy">
+            <div class="eyebrow"><span></span> Open-source · MIT</div>
+            <h1>See what shaped<br />the next token.</h1>
+            <p class="hero-lede">
+              ExplainLLM traces every generated token back to the prompt and prior output,
+              turning model internals into readable relevance scores, heatmaps, and graphs.
+            </p>
+            <div class="hero-actions">
+              <a class="button button-primary" href="#quickstart">Get started <span>→</span></a>
+              <a class="button button-quiet" href="https://github.com/Chintan99/ExplainLLM">View source</a>
+            </div>
+            <div class="install-line" aria-label="Install command">
+              <code><span>$</span> pip install -e <b>".[all]"</b></code>
+              <button class="copy-button" type="button" data-copy='pip install -e ".[all]"' aria-label="Copy install command">
+                <svg viewBox="0 0 20 20" aria-hidden="true"><rect x="6" y="6" width="10" height="10" rx="2"/><path d="M4 13H3a2 2 0 0 1-2-2V3a2 2 0 0 1 2-2h8a2 2 0 0 1 2 2v1"/></svg>
+              </button>
+            </div>
+          </div>
+
+          <div class="hero-visual">
+            <img src="assets/token-trace.svg" alt="A token relevance trace linking the prompt token grass to the generated token green" />
+          </div>
+        </div>
+      </section>
+
+      <section class="signal-strip" aria-label="Project highlights">
+        <div class="shell signal-grid">
+          <div><strong>4</strong><span>relevance methods</span></div>
+          <div><strong>Full</strong><span>growing context</span></div>
+          <div><strong>3</strong><span>ways to run</span></div>
+          <div><strong>JSON</strong><span>auditable output</span></div>
+        </div>
+      </section>
+
+      <section class="section intro-section">
+        <div class="shell intro-grid">
+          <div class="section-kicker">The idea</div>
+          <div>
+            <h2>Generation is sequential.<br />Its explanation should be too.</h2>
+            <p class="section-lede">
+              At step <em>t</em>, the model sees the original prompt plus everything it has already
+              generated. ExplainLLM computes a normalized relevance vector over that exact context,
+              then repeats the process for the next token.
+            </p>
+          </div>
+        </div>
+      </section>
+
+      <section class="section quickstart-section" id="quickstart">
+        <div class="shell">
+          <div class="section-heading">
+            <div>
+              <div class="section-kicker">01 · Quickstart</div>
+              <h2>Pick your entry point.</h2>
+            </div>
+            <p>Use a tiny public model on CPU for a first run. Move to CUDA and a larger causal LM when the workflow feels right.</p>
+          </div>
+
+          <div class="tabs" data-tabs>
+            <div class="tab-list" role="tablist" aria-label="Usage examples">
+              <button role="tab" aria-selected="true" aria-controls="panel-python" id="tab-python">Python</button>
+              <button role="tab" aria-selected="false" aria-controls="panel-cli" id="tab-cli">CLI</button>
+              <button role="tab" aria-selected="false" aria-controls="panel-ui" id="tab-ui">Web UI</button>
+              <button role="tab" aria-selected="false" aria-controls="panel-docker" id="tab-docker">Docker</button>
+            </div>
+
+            <div class="code-panel" role="tabpanel" id="panel-python" aria-labelledby="tab-python">
+              <div class="code-top"><span>example.py</span><button class="copy-text" data-copy-target="code-python">Copy</button></div>
+              <pre id="code-python"><code><span class="kw">from</span> explainllm <span class="kw">import</span> calculate_relevance, RelevanceConfig
+
+config = RelevanceConfig(
+    model_id=<span class="str">"sshleifer/tiny-gpt2"</span>,
+    device=<span class="str">"cpu"</span>,
+    max_new_tokens=<span class="num">12</span>,
+    relevance_method=<span class="str">"combined"</span>,
+)
+
+result = calculate_relevance(
+    <span class="str">"The color of grass is"</span>, config=config
+)
+
+<span class="fn">print</span>(result[<span class="str">"generated_text"</span>])
+<span class="fn">print</span>(result[<span class="str">"token_details"</span>][<span class="num">0</span>][<span class="str">"top_contributing_tokens"</span>])</code></pre>
+            </div>
+
+            <div class="code-panel" role="tabpanel" id="panel-cli" aria-labelledby="tab-cli" hidden>
+              <div class="code-top"><span>Terminal</span><button class="copy-text" data-copy-target="code-cli">Copy</button></div>
+              <pre id="code-cli"><code><span class="cm"># Install core + visualization dependencies</span>
+pip install -e <span class="str">".[viz]"</span>
+
+explainllm run \
+  --prompt <span class="str">"The color of grass is"</span> \
+  --model sshleifer/tiny-gpt2 \
+  --method combined \
+  --max-new-tokens <span class="num">12</span> \
+  --visualize \
+  --export result.json \
+  --heatmap relevance.png</code></pre>
+            </div>
+
+            <div class="code-panel" role="tabpanel" id="panel-ui" aria-labelledby="tab-ui" hidden>
+              <div class="code-top"><span>Terminal</span><button class="copy-text" data-copy-target="code-ui">Copy</button></div>
+              <pre id="code-ui"><code>pip install -e <span class="str">".[app,viz]"</span>
+streamlit run src/streamlit_app/app.py
+
+<span class="cm"># Open http://localhost:8501</span>
+<span class="cm"># Choose a model, method, dtype, and token limit in the sidebar.</span></code></pre>
+            </div>
+
+            <div class="code-panel" role="tabpanel" id="panel-docker" aria-labelledby="tab-docker" hidden>
+              <div class="code-top"><span>Terminal</span><button class="copy-text" data-copy-target="code-docker">Copy</button></div>
+              <pre id="code-docker"><code><span class="cm"># .env — HF_TOKEN is only needed for gated models</span>
+HF_TOKEN=hf_your_token_here
+MODEL_ID=meta-llama/Llama-3.2-1B-Instruct
+
+docker compose up --build
+
+<span class="cm"># UI            http://localhost:8501</span>
+<span class="cm"># Backend       http://localhost:8000/health</span>
+<span class="cm"># Model service http://localhost:8001/health</span></code></pre>
+            </div>
+          </div>
+
+          <div class="callout">
+            <div class="callout-icon">i</div>
+            <div><strong>Using LLaMA, Gemma, or another gated model?</strong> Export <code>HF_TOKEN</code> first. Model weights are downloaded by Hugging Face and can require substantial memory and disk space.</div>
+          </div>
+        </div>
+      </section>
+
+      <section class="section mechanics-section" id="how-it-works">
+        <div class="shell">
+          <div class="section-heading">
+            <div>
+              <div class="section-kicker">02 · Mechanics</div>
+              <h2>Follow one token<br />from prompt to explanation.</h2>
+            </div>
+            <p>ExplainLLM runs a small analysis loop around a decoder-only causal model. Walk through it using <code>The color of grass is</code> as the prompt.</p>
+          </div>
+
+          <div class="tutorial-flow" aria-label="ExplainLLM generation and relevance pipeline">
+            <article class="tutorial-card">
+              <div class="tutorial-number">01</div>
+              <div class="tutorial-visual token-pills"><span>The</span><span>color</span><span>of</span><span>grass</span><span>is</span></div>
+              <h3>Tokenize the prompt</h3>
+              <p>The Hugging Face tokenizer converts text into token IDs. Exact token boundaries depend on the selected model’s vocabulary.</p>
+              <dl><div><dt>Input</dt><dd>Prompt text</dd></div><div><dt>Produces</dt><dd><code>input_ids</code> + mask</dd></div></dl>
+            </article>
+            <article class="tutorial-card">
+              <div class="tutorial-number">02</div>
+              <div class="tutorial-visual tensor-visual"><span>logits</span><i></i><span>attention</span><i></i><span>states</span></div>
+              <h3>Run the model</h3>
+              <p>A forward pass uses eager attention and asks the causal LM for logits, attention tensors, and hidden states.</p>
+              <dl><div><dt>Logit shape</dt><dd><code>[batch, seq, vocab]</code></dd></div><div><dt>Reads</dt><dd>Last sequence position</dd></div></dl>
+            </article>
+            <article class="tutorial-card">
+              <div class="tutorial-number">03</div>
+              <div class="tutorial-visual probability-visual"><div><span>green</span><b>8.7</b></div><div><span>brown</span><b>5.1</b></div><div><span>blue</span><b>3.4</b></div></div>
+              <h3>Choose the next token</h3>
+              <p><code>argmax</code> selects the vocabulary ID with the largest final-position logit. The current implementation is deterministic.</p>
+              <dl><div><dt>Target</dt><dd>Selected token logit</dd></div><div><dt>Decoding</dt><dd>Greedy, no sampling</dd></div></dl>
+            </article>
+            <article class="tutorial-card">
+              <div class="tutorial-number">04</div>
+              <div class="tutorial-visual relevance-bars"><span style="--score:.04">The</span><span style="--score:.19">color</span><span style="--score:.07">of</span><span class="hot" style="--score:.48">grass</span><span style="--score:.22">is</span></div>
+              <h3>Calculate relevance</h3>
+              <p>The selected method scores every token in the current context. Scores are normalized to sum to approximately <code>1.0</code>.</p>
+              <dl><div><dt>Result</dt><dd>One score per token</dd></div><div><dt>Top signal</dt><dd><code>grass → 0.48</code></dd></div></dl>
+            </article>
+            <article class="tutorial-card tutorial-card-wide">
+              <div class="tutorial-number">05</div>
+              <div class="context-growth">
+                <div><small>Step 0 context</small><code>The · color · of · grass · is</code><strong>→ green</strong></div>
+                <span aria-hidden="true">↓ append selected token</span>
+                <div><small>Step 1 context</small><code>The · color · of · grass · is · <b>green</b></code><strong>→ because</strong></div>
+              </div>
+              <div class="tutorial-wide-copy">
+                <h3>Append, then repeat</h3>
+                <p><code>green</code> joins the context before the next forward pass. Later relevance vectors can therefore point to prompt tokens <em>and</em> previously generated tokens.</p>
+              </div>
+            </article>
+          </div>
+
+          <div class="worked-example">
+            <figure class="image-card">
+              <img src="assets/relevance-heatmap.svg" alt="Example relevance heatmap for generating green and the tokens that follow it" loading="lazy" />
+              <figcaption><span>Animated example</span> The outline advances row by row as the context grows. Darker cells mean stronger within-step relevance.</figcaption>
+            </figure>
+            <div class="reading-guide">
+              <div class="section-kicker">How to read the result</div>
+              <h3>Read across one row,<br />not down one column.</h3>
+              <ol>
+                <li><span>1</span><p><strong>Pick an output row.</strong> The first row explains why the model selected <code>green</code>.</p></li>
+                <li><span>2</span><p><strong>Scan its context.</strong> <code>grass</code> is strongest at <code>0.48</code>, followed by <code>is</code> at <code>0.22</code>.</p></li>
+                <li><span>3</span><p><strong>Move to the next row.</strong> The <code>green</code> column is now active because that token joined the context.</p></li>
+                <li><span>4</span><p><strong>Compare roles.</strong> Prompt tokens show grounding; generated tokens show self-conditioning.</p></li>
+              </ol>
+              <div class="reading-note"><strong>Important:</strong> normalization happens independently per row. Compare tokens inside the same generation step.</div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="section methods-section" id="methods">
+        <div class="shell">
+          <div class="section-heading compact">
+            <div>
+              <div class="section-kicker">03 · Relevance methods</div>
+              <h2>Four methods, taught step by step.</h2>
+            </div>
+          </div>
+
+          <div class="method-grid">
+            <article class="method-card featured">
+              <div class="method-meta"><span>Default</span><code>combined</code></div>
+              <h3>Combined</h3>
+              <p class="method-summary">A balanced first view that blends where information was routed with what the selected logit was locally sensitive to.</p>
+              <div class="formula">r = α · r<sub>attention</sub> + (1−α) · r<sub>gradient</sub></div>
+              <ol class="algorithm-list">
+                <li><span>1</span>Compute the normalized attention vector.</li>
+                <li><span>2</span>Compute the normalized gradient × activation vector.</li>
+                <li><span>3</span>Blend them with <code>alpha</code>; default <code>0.5</code>.</li>
+                <li><span>4</span>Normalize the blended vector again.</li>
+              </ol>
+              <div class="method-example"><small>Example with α = 0.6</small><code>0.6 × attention + 0.4 × gradient</code></div>
+              <dl><div><dt>Choose it when</dt><dd>You want a general-purpose trace</dd></div><div><dt>Main cost</dt><dd>Forward + backward pass per token</dd></div></dl>
+              <div class="method-command">--method combined --alpha 0.6</div>
+            </article>
+            <article class="method-card">
+              <div class="method-meta"><span>Fast</span><code>attention</code></div>
+              <h3>Entropy-weighted attention</h3>
+              <p class="method-summary">Uses the model’s attention routing, while giving focused heads more influence than diffuse heads.</p>
+              <div class="formula">w<sub>head</sub> = max(0, 1 − H(attn) / log C)</div>
+              <ol class="algorithm-list">
+                <li><span>1</span>Keep the configured fraction of upper transformer layers.</li>
+                <li><span>2</span>Read each head’s last-query attention over the context.</li>
+                <li><span>3</span>Weight heads by inverse normalized entropy.</li>
+                <li><span>4</span>Dampen detected BOS sinks, aggregate, and normalize.</li>
+              </ol>
+              <div class="method-example"><small>Interpretation</small><code>focused head → larger vote</code></div>
+              <dl><div><dt>Choose it when</dt><dd>You need a faster structural view</dd></div><div><dt>Main caveat</dt><dd>Routing is not causal proof</dd></div></dl>
+              <div class="method-command">--method attention</div>
+            </article>
+            <article class="method-card">
+              <div class="method-meta"><span>Local</span><code>gradient</code></div>
+              <h3>Gradient × activation</h3>
+              <p class="method-summary">Measures how strongly each input embedding participates in the selected next-token logit near the current input.</p>
+              <div class="formula">score<sub>i</sub> = ‖ gradient<sub>i</sub> × embedding<sub>i</sub> ‖<sub>2</sub></div>
+              <ol class="algorithm-list">
+                <li><span>1</span>Attach a hook to the model’s input embedding layer.</li>
+                <li><span>2</span>Select the logit for the greedy next-token ID.</li>
+                <li><span>3</span>Backpropagate that scalar to every context embedding.</li>
+                <li><span>4</span>Take the per-token L2 norm and normalize.</li>
+              </ol>
+              <div class="method-example"><small>Interpretation</small><code>larger local sensitivity → larger score</code></div>
+              <dl><div><dt>Choose it when</dt><dd>You care about local sensitivity</dd></div><div><dt>Main caveat</dt><dd>Gradients can saturate or be noisy</dd></div></dl>
+              <div class="method-command">--method gradient</div>
+            </article>
+            <article class="method-card">
+              <div class="method-meta"><span>Deep</span><code>rollout</code></div>
+              <h3>Attention rollout</h3>
+              <p class="method-summary">Approximates how attention can carry information through the full stack instead of inspecting only upper layers.</p>
+              <div class="formula">A′<sub>l</sub> = 0.5 A<sub>l</sub> + 0.5 I &nbsp;·&nbsp; R = A′<sub>L</sub> … A′<sub>1</sub></div>
+              <ol class="algorithm-list">
+                <li><span>1</span>Average the attention heads in each layer.</li>
+                <li><span>2</span>Dampen sink columns and normalize every row.</li>
+                <li><span>3</span>Mix attention with identity to model residual flow.</li>
+                <li><span>4</span>Multiply layers and take the last-token row.</li>
+              </ol>
+              <div class="method-example"><small>Interpretation</small><code>direct + indirect layer paths</code></div>
+              <dl><div><dt>Choose it when</dt><dd>You want multi-layer flow</dd></div><div><dt>Main caveat</dt><dd>Long paths can become diffuse</dd></div></dl>
+              <div class="method-command">--method rollout</div>
+            </article>
+          </div>
+
+          <div class="method-picker">
+            <div><span>Need a default?</span><strong>Combined</strong><small>Balanced, most expensive</small></div>
+            <div><span>Need speed?</span><strong>Attention</strong><small>No backward pass</small></div>
+            <div><span>Need sensitivity?</span><strong>Gradient</strong><small>Local selected-logit signal</small></div>
+            <div><span>Need layer flow?</span><strong>Rollout</strong><small>Direct + indirect paths</small></div>
+          </div>
+
+          <div class="parameter-row">
+            <div><code>alpha</code><span>Attention weight in combined mode. Default <b>0.5</b>.</span></div>
+            <div><code>suppress_bos</code><span>Dampens a detected BOS attention sink. Default <b>true</b>.</span></div>
+            <div><code>use_top_layers_fraction</code><span>Upper-layer share used for attention. Default <b>0.5</b>.</span></div>
+          </div>
+        </div>
+      </section>
+
+      <section class="section ui-section">
+        <div class="shell ui-grid">
+          <div class="ui-copy">
+            <div class="section-kicker">Explore visually</div>
+            <h2>A chat UI with the model’s working notes.</h2>
+            <p>The Streamlit app keeps prompts in a run history and opens each explanation in a sidebar inspector.</p>
+            <ul class="check-list">
+              <li>Full-context and per-layer heatmaps</li>
+              <li>Arc, radial, and force-directed graphs</li>
+              <li>Text bars and inline HTML highlights</li>
+              <li>Downloadable JSON for downstream analysis</li>
+            </ul>
+            <a class="text-link" href="#quickstart">Launch it locally <span>→</span></a>
+          </div>
+          <figure class="browser-frame">
+            <div class="browser-bar"><i></i><i></i><i></i><span>localhost:8501</span></div>
+            <img src="assets/ui-inspector.svg" alt="Illustrated ExplainLLM Streamlit interface showing a chat response and token relevance inspector" loading="lazy" />
+          </figure>
+        </div>
+      </section>
+
+      <section class="section tradeoff-section" id="tradeoffs">
+        <div class="shell">
+          <div class="section-heading">
+            <div>
+              <div class="section-kicker">04 · Honest tradeoffs</div>
+              <h2>Useful for investigation.<br />Not a proof of causality.</h2>
+            </div>
+            <p>Read the scores as model-behavior signals. They are strongest when used to compare tokens within one generation step and to triangulate across methods.</p>
+          </div>
+
+          <div class="pros-cons">
+            <article>
+              <div class="list-title positive"><span>+</span> Strengths</div>
+              <ul>
+                <li><strong>Stepwise visibility.</strong> Every generated token receives its own explanation.</li>
+                <li><strong>Full-context tracking.</strong> Separates prompt influence from self-conditioning on prior output.</li>
+                <li><strong>Multiple signals.</strong> Attention, gradients, rollout, and a configurable blend.</li>
+                <li><strong>Auditable artifacts.</strong> Raw vectors, ranked contributors, JSON, plots, and text.</li>
+                <li><strong>Flexible access.</strong> Python API, CLI, local UI, and containerized services.</li>
+              </ul>
+            </article>
+            <article>
+              <div class="list-title negative"><span>−</span> Limitations</div>
+              <ul>
+                <li><strong>Approximate attribution.</strong> A high score does not establish counterfactual causation.</li>
+                <li><strong>Compute grows quickly.</strong> A full model pass—and sometimes a backward pass—is performed per output token.</li>
+                <li><strong>Greedy generation only.</strong> The current loop uses <code>argmax</code>, not sampling or beams.</li>
+                <li><strong>Architecture constraints.</strong> The model must expose attentions and use a recognized embedding path.</li>
+                <li><strong>Method sensitivity.</strong> Scores can vary with tokenizer, model, prompt, and attribution method.</li>
+              </ul>
+            </article>
+          </div>
+        </div>
+      </section>
+
+      <section class="section reference-section" id="reference">
+        <div class="shell">
+          <div class="section-heading">
+            <div>
+              <div class="section-kicker">05 · Reference</div>
+              <h2>The result, decoded.</h2>
+            </div>
+            <p>The top-level dictionary keeps model text, token identities, raw per-method relevance, and a human-friendly step trace.</p>
+          </div>
+
+          <div class="reference-grid">
+            <div class="schema-list">
+              <div><code>generated_text</code><span>Decoded output only</span></div>
+              <div><code>full_text</code><span>Prompt and generated output</span></div>
+              <div><code>prompt_tokens</code><span>Cleaned prompt token strings</span></div>
+              <div><code>generated_tokens</code><span>Generated vocabulary IDs</span></div>
+              <div><code>relevance_per_token</code><span>Raw method and layer scores</span></div>
+              <div><code>token_details</code><span>Readable per-step explanations</span></div>
+            </div>
+            <div class="code-panel schema-code">
+              <div class="code-top"><span>result["token_details"][0]</span><button class="copy-text" data-copy-target="code-json">Copy</button></div>
+              <pre id="code-json"><code>{
+  <span class="key">"step"</span>: <span class="num">0</span>,
+  <span class="key">"generated_token"</span>: <span class="str">" green"</span>,
+  <span class="key">"token_id"</span>: <span class="num">1234</span>,
+  <span class="key">"top_contributing_tokens"</span>: [
+    {
+      <span class="key">"token"</span>: <span class="str">"grass"</span>,
+      <span class="key">"position"</span>: <span class="num">3</span>,
+      <span class="key">"is_prompt"</span>: <span class="kw">true</span>,
+      <span class="key">"relevance"</span>: <span class="num">0.48</span>
+    }
+  ],
+  <span class="key">"full_relevance"</span>: [<span class="num">0.04</span>, <span class="num">0.19</span>, <span class="num">0.07</span>, <span class="num">0.48</span>, <span class="num">0.22</span>],
+  <span class="key">"context_tokens"</span>: [<span class="str">"The"</span>, <span class="str">" color"</span>, <span class="str">" of"</span>, <span class="str">" grass"</span>, <span class="str">" is"</span>],
+  <span class="key">"prompt_len"</span>: <span class="num">5</span>
+}</code></pre>
+            </div>
+          </div>
+
+          <div class="support-card">
+            <div>
+              <div class="section-kicker">Model compatibility</div>
+              <h3>Decoder-only Hugging Face causal LMs.</h3>
+              <p>Models must load through <code>AutoModelForCausalLM</code>, return attention tensors, and expose a supported embedding layer.</p>
+            </div>
+            <div class="model-tags">
+              <span>LLaMA-style</span><span>Mistral-style</span><span>Gemma-style</span><span>Qwen-style</span><span>GPT-2-style</span>
+            </div>
+            <p class="not-supported"><strong>Not currently supported:</strong> encoder-decoder, masked-LM, classifier-only, multimodal, or unrecognized embedding architectures.</p>
+          </div>
+        </div>
+      </section>
+
+      <section class="section faq-section">
+        <div class="shell faq-grid">
+          <div>
+            <div class="section-kicker">FAQ</div>
+            <h2>Before your first trace.</h2>
+          </div>
+          <div class="faq-list">
+            <details>
+              <summary>Which method should I start with?<span>+</span></summary>
+              <p>Use <code>combined</code> for a balanced view. Switch to <code>attention</code> for a faster structural signal, or compare several methods when a conclusion matters.</p>
+            </details>
+            <details>
+              <summary>Why are generated tokens contributors?<span>+</span></summary>
+              <p>Autoregressive models feed their prior output back into the next step. Including those tokens reveals when a response starts relying more on itself than on the original prompt.</p>
+            </details>
+            <details>
+              <summary>Can I compare scores across prompts?<span>+</span></summary>
+              <p>Not as absolute measurements. Each relevance vector is normalized within its own step, so the safest comparisons are between tokens in the same context.</p>
+            </details>
+            <details>
+              <summary>Does it work without a GPU?<span>+</span></summary>
+              <p>Yes for small models. Use <code>sshleifer/tiny-gpt2</code> or <code>distilgpt2</code> on CPU; larger models and gradient-based traces are much more practical on CUDA.</p>
+            </details>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <footer class="site-footer">
+      <div class="shell footer-inner">
+        <div>
+          <a class="brand footer-brand" href="#top">
+            <svg viewBox="0 0 32 32" aria-hidden="true"><rect width="32" height="32" rx="9" fill="currentColor"/><circle cx="10" cy="16" r="3"/><circle cx="22" cy="9" r="3"/><circle cx="22" cy="23" r="3"/><path d="M12.5 14.6 19.3 10.5M12.5 17.4l6.8 4.1"/></svg>
+            <span>ExplainLLM</span>
+          </a>
+          <p>Token relevance for autoregressive language models.</p>
+        </div>
+        <div class="footer-links"><a href="#quickstart">Get started</a><a href="#reference">Reference</a><a href="https://github.com/Chintan99/ExplainLLM">GitHub ↗</a><a href="https://github.com/Chintan99/ExplainLLM/blob/main/LICENSE">MIT License ↗</a></div>
+        <div class="footer-note">Built with plain HTML, CSS, JS, and SVG.<br />No build step. No tracking.</div>
+      </div>
+    </footer>
+  </body>
+</html>

@@ -2,6 +2,8 @@
 
 LLM Token Relevance Calculator using DL-Backtrace patterns. Computes and visualizes how each input token contributes to each generated token during autoregressive generation.
 
+**[Read the full documentation →](docs/)**
+
 ## Features
 
 - **Multiple relevance methods**: attention, gradient, rollout, and combined
@@ -49,7 +51,7 @@ config = RelevanceConfig(
     max_new_tokens=20,
 )
 
-result = calculate_relevance("What is the capital of France?", config=config)
+result = calculate_relevance("The color of grass is", config=config)
 print(result["generated_text"])
 
 # Visualize
@@ -67,7 +69,7 @@ explainllm run --prompt "What is AI?" --visualize
 
 # With options
 explainllm run \
-  --prompt "What is the capital of France?" \
+  --prompt "The color of grass is" \
   --model meta-llama/Llama-3.2-1B-Instruct \
   --device cuda \
   --dtype float16 \
@@ -103,7 +105,7 @@ The Streamlit app uses a chat-style interface:
 # Create .env file with your token and defaults
 echo "HF_TOKEN=hf_your_token_here" > .env
 echo "MODEL_ID=meta-llama/Llama-3.2-1B-Instruct" >> .env
-echo "PROMPT=What is the capital of France?" >> .env
+echo "PROMPT=The color of grass is" >> .env
 echo "BACKEND_URL=http://backend:8000" >> .env
 echo "MODEL_SERVICE_URL=http://modelservice:8001" >> .env
 
@@ -212,19 +214,19 @@ Each item in `token_details` corresponds to one generated token:
 ```json
 {
   "step": 0,
-  "generated_token": " Paris",
+  "generated_token": " green",
   "token_id": 1234,
   "top_contributing_tokens": [
     {
-      "token": "France",
-      "position": 5,
+      "token": "grass",
+      "position": 3,
       "is_prompt": true,
-      "relevance": 0.42
+      "relevance": 0.48
     }
   ],
-  "full_relevance": [0.02, 0.03, 0.06, 0.21, 0.03, 0.42, 0.23],
-  "context_tokens": ["What", " is", " the", " capital", " of", " France", "?"],
-  "prompt_len": 7
+  "full_relevance": [0.04, 0.19, 0.07, 0.48, 0.22],
+  "context_tokens": ["The", " color", " of", " grass", " is"],
+  "prompt_len": 5
 }
 ```
 
@@ -242,13 +244,13 @@ In text visualizations, tokens are marked as:
 For example:
 
 ```text
-Step 0 | Generated: ' Paris'
-1. [P:5] France    0.42
-2. [P:3] capital   0.21
-3. [P:1] is        0.08
+Step 0 | Generated: ' green'
+1. [P:3] grass    0.48
+2. [P:4] is       0.22
+3. [P:1] color    0.19
 ```
 
-This means the token `France` had the strongest relevance for generating `Paris` at step `0`, followed by `capital`. In later steps, generated tokens can also become contributors, which lets you inspect whether the model is relying on the original prompt or on its own previous output.
+This means the token `grass` had the strongest relevance for generating `green` at step `0`, followed by `is`. In later steps, generated tokens can also become contributors, which lets you inspect whether the model is relying on the original prompt or on its own previous output.
 
 The visualization utilities present the same data in different forms:
 
